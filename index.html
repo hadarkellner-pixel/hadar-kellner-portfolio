@@ -454,6 +454,9 @@ body.touch .hint .swipe{display:block}
   /* ---------- storage (optional, per viewer) ---------- */
   var tasted = [];
   try { tasted = JSON.parse(localStorage.getItem('hk-kaiten-tasted') || '[]') || []; } catch(e) { tasted = []; }
+  var broken = [];
+  try { broken = JSON.parse(localStorage.getItem('hk-kaiten-broken') || '[]') || []; } catch(e) { broken = []; }
+  function saveBroken(){ try { localStorage.setItem('hk-kaiten-broken', JSON.stringify(broken)); } catch(e) {} }
   function saveTasted(){ try { localStorage.setItem('hk-kaiten-tasted', JSON.stringify(tasted)); } catch(e) {} }
 
   /* ---------- build dishes ---------- */
@@ -624,11 +627,11 @@ body.touch .hint .swipe{display:block}
 
   /* ---------- plates you've "eaten" stack up on the table ---------- */
   var stack = $('stack');
-  function addPlate(n, animate){
-    var p = document.createElement('div'); p.className = 'pl';
-    p.style.top = (-36 - n*9) + 'px';
+  function restack(){ [].forEach.call(stack.children, function(p, n){ p.style.top = (-36 - n*9) + 'px'; }); }
+  function addPlate(i, animate){
+    var p = document.createElement('div'); p.className = 'pl'; p.dataset.i = i;
     if (!animate) p.style.animation = 'none';
-    stack.appendChild(p);
+    stack.appendChild(p); restack();
   }
 
   /* ---------- play with the plates: click one, or grab it and let go, and it flies at the wall and smashes ---------- */
@@ -727,10 +730,8 @@ body.touch .hint .swipe{display:block}
       fly.style.transform = 'translate(' + (x - 75) + 'px,' + (y - 22.5) + 'px) rotate(' + (k*dir*900) + 'deg) scale(' + sc + ')';
       if (k < 1) return requestAnimationFrame(f);
       fly.remove(); shatter(ax, ay);
-      setTimeout(function(){
-        held.style.visibility = ''; held.style.animation = 'none'; held.offsetWidth;
-        held.style.animation = 'drop .55s cubic-bezier(.3,1.4,.5,1) both'; clink(.5);
-      }, 1700);
+      broken.push(+held.dataset.i); saveBroken();
+      held.remove(); restack();
     }
     requestAnimationFrame(f);
   }
@@ -774,11 +775,16 @@ body.touch .hint .swipe{display:block}
   }
   addEventListener('pointerup', releasePlate);
   addEventListener('pointercancel', releasePlate);
-  tasted.forEach(function(_, n){ addPlate(n, false); });
+  tasted.forEach(function(i){ if (broken.indexOf(i) < 0) addPlate(i, false); });
   function taste(i){
-    if (tasted.indexOf(i) > -1) return;
+    if (tasted.indexOf(i) > -1) {
+      // a smashed plate comes back when the project is viewed again
+      var b = broken.indexOf(i);
+      if (b > -1) { broken.splice(b, 1); saveBroken(); addPlate(i, true); }
+      return;
+    }
     tasted.push(i); saveTasted();
-    addPlate(tasted.length - 1, true);
+    addPlate(i, true);
     paintPlates();
     if (tasted.length === N) { toast('All 7 dishes tasted. Time for the check!'); $('contactBtn').classList.add('ring'); }
   }
