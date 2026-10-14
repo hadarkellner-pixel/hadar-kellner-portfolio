@@ -631,106 +631,146 @@ body.touch .hint .swipe{display:block}
     stack.appendChild(p);
   }
 
-  /* ---------- play with the plates: tap to juggle them, grab the top one and fling it ---------- */
+  /* ---------- play with the plates: click one, or grab it and let go, and it flies at the wall and smashes ---------- */
   var ac = null;
-  function clink(v){
-    try {
-      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-      if (ac.state === 'suspended') ac.resume();
-      var t = ac.currentTime;
-      [2300, 3500, 5100].forEach(function(f, k){
-        var o = ac.createOscillator(), g = ac.createGain();
-        o.type = 'sine'; o.frequency.value = f*(1 + Math.random()*.05);
-        g.gain.setValueAtTime(.045*v/(k+1), t); g.gain.exponentialRampToValueAtTime(.0001, t + .14 + k*.05);
-        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .4);
-      });
-    } catch(err) {}
+  function audio(){
+    try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); } catch(err) { ac = null; }
+    return ac;
   }
-  function restack(){ [].forEach.call(stack.children, function(p, n){ p.style.top = (-36 - n*9) + 'px'; }); }
-  function stackSlot(n){ return {x:1020 + 75, y:790 - 36 - n*9 + 22.5}; }
-  var plateBusy = false;
-  function juggle(){
-    var list = [].slice.call(stack.children).reverse();
-    if (!list.length || plateBusy || REDUCED) { clink(.6); return; }
-    plateBusy = true;
-    list.forEach(function(p, k){
-      var h = 120 + Math.random()*50, spin = (k % 2 ? -1 : 1)*(360 + Math.round(Math.random()*2)*360), dx = (Math.random() - .5)*46;
-      var a = p.animate([
-        {transform:'translate(0,0) perspective(400px) rotateX(0)', offset:0},
-        {transform:'translate(' + dx + 'px,' + (-h) + 'px) perspective(400px) rotateX(' + spin/2 + 'deg)', offset:.5, easing:'cubic-bezier(.5,0,.9,.5)'},
-        {transform:'translate(0,0) perspective(400px) rotateX(' + spin + 'deg)', offset:1}
-      ], {duration:720 + k*30, delay:k*60, easing:'cubic-bezier(.2,.6,.4,1)'});
-      setTimeout(function(){ clink(.9 - k*.07); }, k*60 + 720 + k*30 - 40);
-      if (k === list.length - 1) a.onfinish = function(){ plateBusy = false; };
+  function clink(v){
+    if (!audio()) return;
+    var t = ac.currentTime;
+    [2300, 3500, 5100].forEach(function(f, k){
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine'; o.frequency.value = f*(1 + Math.random()*.05);
+      g.gain.setValueAtTime(.045*v/(k+1), t); g.gain.exponentialRampToValueAtTime(.0001, t + .14 + k*.05);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .4);
     });
   }
+  function crash(){
+    if (!audio()) return;
+    var t = ac.currentTime, len = Math.floor(ac.sampleRate*.28), buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/len, 3);
+    var src = ac.createBufferSource(), hp = ac.createBiquadFilter(), g = ac.createGain();
+    src.buffer = buf; hp.type = 'highpass'; hp.frequency.value = 1700; g.gain.value = .16;
+    src.connect(hp); hp.connect(g); g.connect(ac.destination); src.start(t);
+    for (var k = 0; k < 9; k++) {
+      (function(delay, f){
+        var o = ac.createOscillator(), gg = ac.createGain(), at = t + delay;
+        o.type = 'sine'; o.frequency.value = f;
+        gg.gain.setValueAtTime(.04, at); gg.gain.exponentialRampToValueAtTime(.0001, at + .12);
+        o.connect(gg); gg.connect(ac.destination); o.start(at); o.stop(at + .2);
+      })(.03 + Math.random()*.55, 2000 + Math.random()*4800);
+    }
+  }
+  function stackSlot(n){ return {x:1020 + 75, y:790 - 36 - n*9 + 22.5}; }
+  function topPlate(){
+    for (var i = stack.children.length - 1; i >= 0; i--) if (stack.children[i].style.visibility !== 'hidden') return stack.children[i];
+    return null;
+  }
+
+  function shatter(ix, iy){
+    var box = document.createElement('div'), SC = .85;
+    box.style.cssText = 'position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;transform:translate(' + ix + 'px,' + iy + 'px) scale(' + SC + ')';
+    var scuff = document.createElement('div');
+    scuff.style.cssText = 'position:absolute;left:-90px;top:-40px;width:180px;height:80px;border-radius:50%;background:radial-gradient(closest-side,rgba(70,35,12,.38),rgba(70,35,12,0));pointer-events:none';
+    var puff = document.createElement('div');
+    puff.style.cssText = 'position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,248,232,.95),rgba(255,236,200,.35) 55%,rgba(255,236,200,0))';
+    box.appendChild(scuff); box.appendChild(puff);
+    var W = 150, H = 45, cols = 4, vx = [], pts = [];
+    for (var j = 0; j <= 2; j++) { pts[j] = []; for (var i = 0; i <= cols; i++) {
+      var jx = (i === 0 || i === cols) ? 0 : (Math.random() - .5)*13, jy = (j === 0 || j === 2) ? 0 : (Math.random() - .5)*9;
+      pts[j][i] = [i*W/cols + jx, j*H/2 + jy];
+    } }
+    var pieces = [];
+    for (var j2 = 0; j2 < 2; j2++) for (var i2 = 0; i2 < cols; i2++) {
+      var A = pts[j2][i2], B = pts[j2][i2+1], C = pts[j2+1][i2+1], D = pts[j2+1][i2];
+      if (Math.random() < .65) { var dg = Math.random() < .5; pieces.push(dg ? [A,B,C] : [A,B,D]); pieces.push(dg ? [A,C,D] : [B,C,D]); }
+      else pieces.push([A,B,C,D]);
+    }
+    var shards = pieces.map(function(poly){
+      var cx = 0, cy = 0; poly.forEach(function(p){ cx += p[0]; cy += p[1]; }); cx /= poly.length; cy /= poly.length;
+      var el = document.createElement('div');
+      el.style.cssText = 'position:absolute;left:-75px;top:-22.5px;width:150px;height:45px;background:url(img/plate-table.png) center/100% 100% no-repeat;filter:drop-shadow(0 3px 3px rgba(50,25,5,.3));' +
+        'transform-origin:' + cx + 'px ' + cy + 'px;clip-path:polygon(' + poly.map(function(p){ return p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px'; }).join(',') + ')';
+      box.appendChild(el);
+      var dx = cx - 75, dy = cy - 22.5;
+      return {el:el, x:0, y:0, r:0, vx:dx*5 + (Math.random() - .5)*220, vy:dy*6 - 320 - Math.random()*260, vr:(Math.random() - .5)*1500, a:1};
+    });
+    stage.appendChild(box);
+    puff.animate([{transform:'scale(.25)', opacity:.95},{transform:'scale(1.5)', opacity:0}], {duration:380, easing:'ease-out', fill:'forwards'});
+    scuff.animate([{opacity:1},{opacity:0}], {duration:2600, easing:'ease-in', fill:'forwards'});
+    scene.animate([{transform:'translate(0,0)'},{transform:'translate(-4px,2px)'},{transform:'translate(3px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'translate(0,0)'}], {duration:230});
+    crash();
+    var last = performance.now(), born = last, floor = (560 - iy)/SC;
+    function fall(now){
+      var d = Math.min(.04, (now - last)/1000); last = now;
+      shards.forEach(function(sh){
+        sh.vy += 2300*d; sh.x += sh.vx*d; sh.y += sh.vy*d; sh.r += sh.vr*d;
+        if (sh.y > floor) { sh.a -= d*3.2; }
+        sh.el.style.opacity = Math.max(0, sh.a);
+        sh.el.style.transform = 'translate(' + sh.x.toFixed(1) + 'px,' + sh.y.toFixed(1) + 'px) rotate(' + sh.r.toFixed(0) + 'deg)';
+      });
+      if (now - born < 2200 && shards.some(function(sh){ return sh.a > 0; })) requestAnimationFrame(fall); else box.remove();
+    }
+    requestAnimationFrame(fall);
+  }
+
+  function throwPlate(held, sx, sy, ax, ay, fly){
+    held.style.visibility = 'hidden';
+    if (!fly) { fly = document.createElement('div'); fly.className = 'pl-fly'; stage.appendChild(fly); }
+    fly.classList.remove('held');
+    var t0 = performance.now(), D = 640, dir = Math.random() < .5 ? -1 : 1;
+    function f(now){
+      var k = Math.min(1, (now - t0)/D), e = Math.pow(k, 1.3);
+      var x = sx + (ax - sx)*e, y = sy + (ay - sy)*e - Math.sin(k*Math.PI)*80, sc = 1.1 - .25*e;
+      fly.style.transform = 'translate(' + (x - 75) + 'px,' + (y - 22.5) + 'px) rotate(' + (k*dir*900) + 'deg) scale(' + sc + ')';
+      if (k < 1) return requestAnimationFrame(f);
+      fly.remove(); shatter(ax, ay);
+      setTimeout(function(){
+        held.style.visibility = ''; held.style.animation = 'none'; held.offsetWidth;
+        held.style.animation = 'drop .55s cubic-bezier(.3,1.4,.5,1) both'; clink(.5);
+      }, 1700);
+    }
+    requestAnimationFrame(f);
+  }
+
   var grab = null;
+  function toStage(e){ return {x:(e.clientX - TX)/S, y:(e.clientY - TY)/S}; }
   stack.addEventListener('pointerdown', function(e){
-    var held = stack.lastElementChild;
-    if (!held || plateBusy || !e.target.classList.contains('pl') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    var held = topPlate();
+    if (!held || !e.target.classList.contains('pl') || (e.pointerType === 'mouse' && e.button !== 0)) return;
     e.stopPropagation();
-    var m = held.getBoundingClientRect();
     grab = {id:e.pointerId, held:held, x0:e.clientX, y0:e.clientY, moved:false, fly:null, ox:0, oy:0, cx:0, cy:0, samples:[]};
   });
-  function toStage(e){ return {x:(e.clientX - TX)/S, y:(e.clientY - TY)/S}; }
   addEventListener('pointermove', function(e){
     if (!grab || e.pointerId !== grab.id) return;
     if (!grab.moved) {
       if (Math.hypot(e.clientX - grab.x0, e.clientY - grab.y0) < 7) return;
-      grab.moved = true; plateBusy = true; body.classList.add('plating'); hideHint();
-      var slot = stackSlot(stack.children.length - 1), st = toStage({clientX:grab.x0, clientY:grab.y0});
+      grab.moved = true; body.classList.add('plating'); hideHint();
+      var n = [].indexOf.call(stack.children, grab.held), slot = stackSlot(n), st = toStage({clientX:grab.x0, clientY:grab.y0});
       grab.ox = slot.x - st.x; grab.oy = slot.y - st.y;
       grab.fly = document.createElement('div'); grab.fly.className = 'pl-fly held';
       stage.appendChild(grab.fly);
       grab.held.style.visibility = 'hidden';
-      grab.cx = slot.x; grab.cy = slot.y;
       clink(.35);
     }
     var p = toStage(e);
     grab.cx = p.x + grab.ox; grab.cy = p.y + grab.oy;
     var now = performance.now(); grab.samples.push([now, grab.cx, grab.cy]);
     while (grab.samples.length > 2 && now - grab.samples[0][0] > 110) grab.samples.shift();
-    grab.fly.style.transform = 'translate(' + (grab.cx - 75) + 'px,' + (grab.cy - 22.5) + 'px) scale(1.1) rotate(' + Math.max(-8, Math.min(8, (grab.cx - (grab.samples[0][1]))*.35)) + 'deg)';
-    grab.ox += (0 - grab.ox)*.02; grab.oy += (0 - grab.oy)*.02;
+    grab.fly.style.transform = 'translate(' + (grab.cx - 75) + 'px,' + (grab.cy - 22.5) + 'px) scale(1.1) rotate(' + Math.max(-8, Math.min(8, (grab.cx - grab.samples[0][1])*.35)) + 'deg)';
+    grab.ox *= .98; grab.oy *= .98;
   });
   function releasePlate(e){
     if (!grab || e.pointerId !== grab.id) return;
     var g = grab; grab = null;
-    if (!g.moved) { juggle(); return; }
-    body.classList.remove('plating'); g.fly.classList.remove('held');
-    var s = g.samples, a = s[0], b = s[s.length - 1], dt = Math.max(.016, (b[0] - a[0])/1000);
-    var vx = (b[1] - a[1])/dt, vy = (b[2] - a[2])/dt, sp = Math.hypot(vx, vy);
-    if (sp > 2600) { vx *= 2600/sp; vy *= 2600/sp; }
-    var x = g.cx, y = g.cy, last = performance.now(), rest = 0, bounced = 0;
-    var X0 = 85, X1 = 1451, Y0 = 640, Y1 = 835;
-    function skid(now){
-      var d = Math.min(.04, (now - last)/1000); last = now;
-      x += vx*d; y += vy*d;
-      var f = Math.exp(-2.1*d); vx *= f; vy *= f;
-      var hit = false;
-      if (x < X0) { x = X0; vx = Math.abs(vx)*.6; hit = true; } else if (x > X1) { x = X1; vx = -Math.abs(vx)*.6; hit = true; }
-      if (y < Y0) { y = Y0 + (y < Y0 - 30 ? 0 : 0); vy = Math.abs(vy)*.6; hit = true; } else if (y > Y1) { y = Y1; vy = -Math.abs(vy)*.6; hit = true; }
-      if (hit && Math.hypot(vx, vy) > 160) clink(Math.min(1, Math.hypot(vx, vy)/1200));
-      var v = Math.hypot(vx, vy), tilt = Math.max(-9, Math.min(9, vx/2600*14));
-      g.fly.style.transform = 'translate(' + (x - 75) + 'px,' + (y - 22.5) + 'px) rotate(' + tilt + 'deg)';
-      rest = v < 18 ? rest + d : 0;
-      if (rest > .7) return home();
-      requestAnimationFrame(skid);
-    }
-    function home(){
-      var n = stack.children.length - 1, to = stackSlot(n), t0 = performance.now(), D = 760, x0 = x, y0 = y;
-      function fly(now){
-        var k = Math.min(1, (now - t0)/D), e2 = 1 - Math.pow(1 - k, 3);
-        var px = x0 + (to.x - x0)*e2, py = y0 + (to.y - y0)*e2 - Math.sin(k*Math.PI)*130;
-        g.fly.style.transform = 'translate(' + (px - 75) + 'px,' + (py - 22.5) + 'px) perspective(400px) rotateX(' + (k*360) + 'deg)';
-        if (k < 1) return requestAnimationFrame(fly);
-        stack.appendChild(g.held); g.held.style.visibility = ''; g.held.style.animation = 'none'; restack();
-        g.fly.remove(); plateBusy = false; clink(.9);
-        g.held.animate([{transform:'translateY(-7px)'},{transform:'none'}], {duration:260, easing:'cubic-bezier(.3,1.6,.5,1)'});
-      }
-      requestAnimationFrame(fly);
-    }
-    requestAnimationFrame(function(t){ last = t; skid(t); });
+    body.classList.remove('plating');
+    var n = [].indexOf.call(stack.children, g.held), slot = stackSlot(n);
+    if (!g.moved) { clink(.5); return throwPlate(g.held, slot.x, slot.y, 180 + Math.random()*1180, 125 + Math.random()*165, null); }
+    var s = g.samples, a = s[0], b = s[s.length - 1], dt = Math.max(.016, (b[0] - a[0])/1000), vx = (b[1] - a[1])/dt;
+    var ax = Math.max(90, Math.min(1446, g.cx + Math.max(-1800, Math.min(1800, vx))*.3));
+    throwPlate(g.held, g.cx, g.cy, ax, 125 + Math.random()*165, g.fly);
   }
   addEventListener('pointerup', releasePlate);
   addEventListener('pointercancel', releasePlate);
