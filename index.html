@@ -73,7 +73,12 @@ body.portrait #stage .bg{-webkit-mask-image:linear-gradient(transparent 0,#000 9
 @keyframes steam{0%{transform:translateY(20px) scaleX(.6);opacity:0}25%{opacity:.7}100%{transform:translateY(-70px) scaleX(1.5) skewX(14deg);opacity:0}}
 .stack{position:absolute;left:1020px;top:790px;width:150px;height:0}
 .stack .pl{position:absolute;left:0;width:150px;height:45px;background:url(img/plate-table.png) center/100% 100% no-repeat;
-  filter:drop-shadow(0 5px 5px rgba(50,25,5,.32));animation:drop .55s cubic-bezier(.3,1.4,.5,1) both}
+  filter:drop-shadow(0 5px 5px rgba(50,25,5,.32));animation:drop .55s cubic-bezier(.3,1.4,.5,1) both;pointer-events:auto;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+.stack .pl:last-child:hover{filter:drop-shadow(0 5px 5px rgba(50,25,5,.32)) brightness(1.06)}
+.pl-fly{position:absolute;left:0;top:0;width:150px;height:45px;background:url(img/plate-table.png) center/100% 100% no-repeat;pointer-events:none;will-change:transform;
+  filter:drop-shadow(0 6px 6px rgba(50,25,5,.32))}
+.pl-fly.held{filter:drop-shadow(0 18px 11px rgba(50,25,5,.3))}
+body.plating,body.plating *{cursor:grabbing!important}
 @keyframes drop{from{transform:translateY(-70px);opacity:0}to{transform:none;opacity:1}}
 .vignette{position:fixed;inset:0;pointer-events:none;z-index:1;visibility:hidden;
   background:radial-gradient(ellipse 75% 62% at 50% var(--ry,56%),rgba(30,14,2,0) 52%,rgba(30,14,2,.38) 100%),linear-gradient(rgba(35,18,4,.22),rgba(35,18,4,0) 34%)}
@@ -625,6 +630,110 @@ body.touch .hint .swipe{display:block}
     if (!animate) p.style.animation = 'none';
     stack.appendChild(p);
   }
+
+  /* ---------- play with the plates: tap to juggle them, grab the top one and fling it ---------- */
+  var ac = null;
+  function clink(v){
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') ac.resume();
+      var t = ac.currentTime;
+      [2300, 3500, 5100].forEach(function(f, k){
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type = 'sine'; o.frequency.value = f*(1 + Math.random()*.05);
+        g.gain.setValueAtTime(.045*v/(k+1), t); g.gain.exponentialRampToValueAtTime(.0001, t + .14 + k*.05);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .4);
+      });
+    } catch(err) {}
+  }
+  function restack(){ [].forEach.call(stack.children, function(p, n){ p.style.top = (-36 - n*9) + 'px'; }); }
+  function stackSlot(n){ return {x:1020 + 75, y:790 - 36 - n*9 + 22.5}; }
+  var plateBusy = false;
+  function juggle(){
+    var list = [].slice.call(stack.children).reverse();
+    if (!list.length || plateBusy || REDUCED) { clink(.6); return; }
+    plateBusy = true;
+    list.forEach(function(p, k){
+      var h = 120 + Math.random()*50, spin = (k % 2 ? -1 : 1)*(360 + Math.round(Math.random()*2)*360), dx = (Math.random() - .5)*46;
+      var a = p.animate([
+        {transform:'translate(0,0) perspective(400px) rotateX(0)', offset:0},
+        {transform:'translate(' + dx + 'px,' + (-h) + 'px) perspective(400px) rotateX(' + spin/2 + 'deg)', offset:.5, easing:'cubic-bezier(.5,0,.9,.5)'},
+        {transform:'translate(0,0) perspective(400px) rotateX(' + spin + 'deg)', offset:1}
+      ], {duration:720 + k*30, delay:k*60, easing:'cubic-bezier(.2,.6,.4,1)'});
+      setTimeout(function(){ clink(.9 - k*.07); }, k*60 + 720 + k*30 - 40);
+      if (k === list.length - 1) a.onfinish = function(){ plateBusy = false; };
+    });
+  }
+  var grab = null;
+  stack.addEventListener('pointerdown', function(e){
+    var held = stack.lastElementChild;
+    if (!held || plateBusy || !e.target.classList.contains('pl') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.stopPropagation();
+    var m = held.getBoundingClientRect();
+    grab = {id:e.pointerId, held:held, x0:e.clientX, y0:e.clientY, moved:false, fly:null, ox:0, oy:0, cx:0, cy:0, samples:[]};
+  });
+  function toStage(e){ return {x:(e.clientX - TX)/S, y:(e.clientY - TY)/S}; }
+  addEventListener('pointermove', function(e){
+    if (!grab || e.pointerId !== grab.id) return;
+    if (!grab.moved) {
+      if (Math.hypot(e.clientX - grab.x0, e.clientY - grab.y0) < 7) return;
+      grab.moved = true; plateBusy = true; body.classList.add('plating'); hideHint();
+      var slot = stackSlot(stack.children.length - 1), st = toStage({clientX:grab.x0, clientY:grab.y0});
+      grab.ox = slot.x - st.x; grab.oy = slot.y - st.y;
+      grab.fly = document.createElement('div'); grab.fly.className = 'pl-fly held';
+      stage.appendChild(grab.fly);
+      grab.held.style.visibility = 'hidden';
+      grab.cx = slot.x; grab.cy = slot.y;
+      clink(.35);
+    }
+    var p = toStage(e);
+    grab.cx = p.x + grab.ox; grab.cy = p.y + grab.oy;
+    var now = performance.now(); grab.samples.push([now, grab.cx, grab.cy]);
+    while (grab.samples.length > 2 && now - grab.samples[0][0] > 110) grab.samples.shift();
+    grab.fly.style.transform = 'translate(' + (grab.cx - 75) + 'px,' + (grab.cy - 22.5) + 'px) scale(1.1) rotate(' + Math.max(-8, Math.min(8, (grab.cx - (grab.samples[0][1]))*.35)) + 'deg)';
+    grab.ox += (0 - grab.ox)*.02; grab.oy += (0 - grab.oy)*.02;
+  });
+  function releasePlate(e){
+    if (!grab || e.pointerId !== grab.id) return;
+    var g = grab; grab = null;
+    if (!g.moved) { juggle(); return; }
+    body.classList.remove('plating'); g.fly.classList.remove('held');
+    var s = g.samples, a = s[0], b = s[s.length - 1], dt = Math.max(.016, (b[0] - a[0])/1000);
+    var vx = (b[1] - a[1])/dt, vy = (b[2] - a[2])/dt, sp = Math.hypot(vx, vy);
+    if (sp > 2600) { vx *= 2600/sp; vy *= 2600/sp; }
+    var x = g.cx, y = g.cy, last = performance.now(), rest = 0, bounced = 0;
+    var X0 = 85, X1 = 1451, Y0 = 640, Y1 = 835;
+    function skid(now){
+      var d = Math.min(.04, (now - last)/1000); last = now;
+      x += vx*d; y += vy*d;
+      var f = Math.exp(-2.1*d); vx *= f; vy *= f;
+      var hit = false;
+      if (x < X0) { x = X0; vx = Math.abs(vx)*.6; hit = true; } else if (x > X1) { x = X1; vx = -Math.abs(vx)*.6; hit = true; }
+      if (y < Y0) { y = Y0 + (y < Y0 - 30 ? 0 : 0); vy = Math.abs(vy)*.6; hit = true; } else if (y > Y1) { y = Y1; vy = -Math.abs(vy)*.6; hit = true; }
+      if (hit && Math.hypot(vx, vy) > 160) clink(Math.min(1, Math.hypot(vx, vy)/1200));
+      var v = Math.hypot(vx, vy), tilt = Math.max(-9, Math.min(9, vx/2600*14));
+      g.fly.style.transform = 'translate(' + (x - 75) + 'px,' + (y - 22.5) + 'px) rotate(' + tilt + 'deg)';
+      rest = v < 18 ? rest + d : 0;
+      if (rest > .7) return home();
+      requestAnimationFrame(skid);
+    }
+    function home(){
+      var n = stack.children.length - 1, to = stackSlot(n), t0 = performance.now(), D = 760, x0 = x, y0 = y;
+      function fly(now){
+        var k = Math.min(1, (now - t0)/D), e2 = 1 - Math.pow(1 - k, 3);
+        var px = x0 + (to.x - x0)*e2, py = y0 + (to.y - y0)*e2 - Math.sin(k*Math.PI)*130;
+        g.fly.style.transform = 'translate(' + (px - 75) + 'px,' + (py - 22.5) + 'px) perspective(400px) rotateX(' + (k*360) + 'deg)';
+        if (k < 1) return requestAnimationFrame(fly);
+        stack.appendChild(g.held); g.held.style.visibility = ''; g.held.style.animation = 'none'; restack();
+        g.fly.remove(); plateBusy = false; clink(.9);
+        g.held.animate([{transform:'translateY(-7px)'},{transform:'none'}], {duration:260, easing:'cubic-bezier(.3,1.6,.5,1)'});
+      }
+      requestAnimationFrame(fly);
+    }
+    requestAnimationFrame(function(t){ last = t; skid(t); });
+  }
+  addEventListener('pointerup', releasePlate);
+  addEventListener('pointercancel', releasePlate);
   tasted.forEach(function(_, n){ addPlate(n, false); });
   function taste(i){
     if (tasted.indexOf(i) > -1) return;
