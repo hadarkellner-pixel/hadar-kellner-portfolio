@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>SafeBreach · Hadar Kellner</title>
+<meta name="description" content="Case study: designing SafeBreach's breach-and-attack simulation platform, its integration with Splunk Mission Control, and a new design system.">
+<link rel="preload" href="../fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .notes{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .notes li{border-left:2px solid var(--accent);padding:2px 0 2px 14px;font-size:15.5px}
+  .notes b{display:block}
+  .flow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 0;font-size:15px}
+  .flow span{background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .flow i{font-style:normal;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="name" href="../">Hadar Kellner</a>
+    <ul>
+      <li><a href="../#work" aria-current="page">Work</a></li>
+      <li><a href="../#about">About</a></li>
+      <li class="hide-s"><a href="../Hadar-Kellner-CV.pdf">CV</a></li>
+      <li><a href="../#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="cs-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study · SafeBreach · 2019–2021</span>
+      <h1>Making attack simulation results readable, in our product and in Splunk.</h1>
+      <p class="lede">SafeBreach is a breach-and-attack simulation (BAS) platform: it runs simulated attacks against a company’s own environment to show which security controls catch them and which don’t. I designed data-heavy workflows for the platform, its integration with Splunk Mission Control, and a new design system that I rolled out with the front-end team.</p>
+
+      <dl class="facts">
+        <div><dt>My role</dt><dd>UX/UI Designer</dd></div>
+        <div><dt>Scope</dt><dd>Platform workflows, Splunk integration, design system</dd></div>
+        <div><dt>Worked with</dt><dd>The front-end team</dd></div>
+        <div><dt>Users</dt><dd>Security teams running and acting on attack simulations</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom:72px">
+    <figure class="shot" style="margin:0"><img src="../img/safebreach/running.jpg" width="1600" height="899" alt="SafeBreach main screen while a test runs: a dark header with live status (36% missed, 24% detected, 18% stopped, 15% prevented), security controls by category with their tools, top attack types with counts, and the list of simulators. Below, the test timeline and the upcoming tests queue."></figure>
+    <figcaption>The main screen while a test is running.</figcaption>
+  </div>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">01 / The platform</span>
+        <div>
+          <h2>One screen for what’s running, what ran, and what’s next.</h2>
+          <p class="lede">A test can run a huge number of simulations across many security controls and machines. The main screen brings the live test, the history and the queue together, and the navigation follows the job: Simulate, Prioritize, Mitigate.</p>
+        </div>
+      </div>
+
+      <article class="moment">
+        <span class="tag">01.1</span><span class="muted small">While a test runs</span>
+        <h3>Results as they come in</h3>
+        <ul class="notes" style="max-width:var(--text)">
+          <li><b>Status</b>Every simulation lands in one of four outcomes: missed, detected, stopped or prevented. The donut shows the split live.</li>
+          <li><b>Security controls by category</b>DLP, web, endpoint, email, network inspection, network access, containers and cloud, each with the tools being tested and its progress.</li>
+          <li><b>Top attack types and simulators</b>Which kinds of attack are running most, and on which machines.</li>
+          <li><b>Test timeline</b>Past tests grouped by day, with the controls involved, the number of simulations, the share not blocked, and a status donut per test.</li>
+        </ul>
+      </article>
+
+      <article class="moment">
+        <span class="tag">01.2</span><span class="muted small">Before and between tests</span>
+        <h3>States, not just a happy path</h3>
+        <div class="grid-2">
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/up-next.jpg" width="1600" height="902" loading="lazy" alt="Main screen before a test starts: 'Up Next: Infiltration Europe' with a countdown, a large Start Now button, and the categories, attack types and simulators that will be tested, shown dimmed."></div><figcaption><strong style="color:var(--ink)">Up next.</strong> Before a test starts, the same layout previews what will be tested, with a countdown and Start Now.</figcaption></figure>
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/on-scroll.jpg" width="1600" height="902" loading="lazy" alt="Main screen after scrolling: the header collapses into one bar with the running test's name, simulation count, timer, pause and stop. The queue ends with 'You've reached the end of the queue' and three shortcuts: Test your grid, Plan security tests, Create custom attacks."></div><figcaption><strong style="color:var(--ink)">On scroll.</strong> The header collapses to one bar with the running test and its controls. The end of the queue offers three next steps: test, plan or create.</figcaption></figure>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">02 / Splunk integration</span>
+        <div>
+          <h2>Bringing SafeBreach into the analyst’s investigation.</h2>
+          <p class="lede">Security analysts work their alerts (“notables”) in Splunk Mission Control. I designed how SafeBreach shows up there, so an analyst looking at a suspicious host can see how exposed it is without leaving the investigation.</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="side">The flow</div>
+        <div class="flow"><span>Notable in Mission Control</span><i>→</i><span>SafeBreach tab</span><i>→</i><span>Run a blast radius test</span><i>→</i><span>Drilldown</span><i>→</i><span>Mitigate</span></div>
+      </div>
+
+      <article class="moment" style="margin-top:48px">
+        <span class="tag">02.1</span><span class="muted small">Inside a notable</span>
+        <h3>From “no results” to a risk score in one click</h3>
+        <div style="display:grid;gap:28px">
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-notable-empty.jpg" width="1280" height="720" loading="lazy" alt="Splunk Mission Control notables list with one row expanded to a SafeBreach tab: 'No Results Detected… Run SafeBreach Incident Response Blast Radius Analysis Test', a Run Now button and a Go to SafeBreach link."></div><figcaption><strong style="color:var(--ink)">Empty state.</strong> If the host hasn’t been tested, the tab offers one action: run a blast radius test now, or go to SafeBreach.</figcaption></figure>
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-notable.jpg" width="1280" height="720" loading="lazy" alt="The same expanded notable with results: status breakdown donut, security control performance for Palo Alto, Cylance and Cybereason, and a blast radius line from external attacker to the host at 55% risk to 3 critical segments."></div><figcaption><strong style="color:var(--ink)">With results.</strong> Status breakdown, how each security control performed, and the blast radius: from an external attacker, through this host (55% risk), to critical segments.</figcaption></figure>
+        </div>
+      </article>
+
+      <article class="moment">
+        <span class="tag">02.2</span><span class="muted small">Drilldown</span>
+        <h3>From exposure to action</h3>
+        <div class="grid-2" style="align-items:start">
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-drilldown.jpg" width="1280" height="720" loading="lazy" alt="Investigation drilldown with a SafeBreach tab: status breakdown, security control performance, host-level attack surface by MITRE tactic as a colored bar chart, a mitigation insights table with Mitigate buttons, and a blast radius radar chart linking the host to PCI segment, payment application and production database."></div></figure>
+          <ul class="notes">
+            <li><b>Attack surface by MITRE tactic</b>The host’s exposure across tactics from initial access to impact, colored by severity.</li>
+            <li><b>Mitigation insights</b>What the simulations found, with severity, control, target and number of attackers, and a Mitigate button on every row.</li>
+            <li><b>Blast radius</b>Which tactics worked on this host, and which critical assets it can reach from there: a PCI segment, a payment application, a production database.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="moment">
+        <span class="tag">02.3</span><span class="muted small">SafeBreach app in Splunk</span>
+        <h3>The overview, in the analyst’s tool</h3>
+        <figure style="margin:0"><div class="shot"><img src="../img/safebreach/splunk-dashboard.jpg" width="1280" height="720" loading="lazy" alt="SafeBreach dashboard inside Splunk Mission Control: status breakdown, threat groups (Deep Panda, APT29, Lazarus Group and more) by outcome, security control performance, confirmed attacker potential against correlated notables, totals for insights mitigated, confirmed notables and tests completed, a test timeline and mitigation insights. Every panel can be filtered by segment."></div><figcaption>Threat groups, control performance, attacker potential matched against Splunk notables, and the test timeline, each filterable by segment.</figcaption></figure>
+      </article>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">03 / Design system</span>
+        <div>
+          <h2>A new design system, rolled out with front-end.</h2>
+          <p class="lede">I created SafeBreach’s new design system and rolled it out together with the front-end team: typography, color, components, and written rules for how they behave.</p>
+        </div>
+      </div>
+      <div class="grid-2" style="align-items:start">
+        <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/ds-components.jpg" width="1440" height="1740" loading="lazy" alt="Component sheet: large, medium and small buttons in each state, links, icon buttons, tabs, toggles and checkboxes, input fields, dropdowns and split buttons."></div><figcaption>Buttons, inputs, tabs, dropdowns and split buttons, each in every state.</figcaption></figure>
+        <div>
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/ds-feedback.jpg" width="1440" height="390" loading="lazy" alt="Alert components for error, warning, success and confirmation, with notes: alerts always sit at the top of the screen; some errors are permanent and have no close button; success messages close on a timer but can also be closed manually."></div><figcaption>Rules, not just styles.</figcaption></figure>
+          <ul class="notes" style="margin-top:20px">
+            <li><b>Alerts always sit at the top</b>A dismissible alert covers the content. One that can’t be dismissed pushes the content down.</li>
+            <li><b>Some errors stay</b>Permanent errors have no close button.</li>
+            <li><b>Success gets out of the way</b>Success messages close on a timer, and can also be closed by hand.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap next" style="border-top:1px solid var(--line)">
+    <a class="btn" href="../">← All work</a>
+    <a class="btn primary" href="../wix-ai-code-assistant/">Next: Wix AI Code Assistant →</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>Hadar Kellner · Senior Product Designer</span>
+    <span><a href="mailto:hadar.kellner@gmail.com">hadar.kellner@gmail.com</a> · <a href="https://www.linkedin.com/in/hadar-kellner-950209128/" target="_blank" rel="noopener">LinkedIn</a> · <a href="../Hadar-Kellner-CV.pdf">CV</a></span>
+  </div>
+</footer>
+</body>
+</html>
