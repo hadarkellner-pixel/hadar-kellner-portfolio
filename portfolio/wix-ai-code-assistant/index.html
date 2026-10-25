@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI Code Assistant · Hadar Kellner</title>
+<meta name="description" content="Case study: designing an AI assistant in Wix Studio that writes code into live client sites, so people who don't code stay in control of every change.">
+<link rel="preload" href="../../fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="name" href="../">Hadar Kellner</a>
+    <ul>
+      <li><a href="../#work" aria-current="page">Work</a></li>
+      <li><a href="../#about">About</a></li>
+      <li class="hide-s"><a href="../../Hadar-Kellner-CV.pdf">CV</a></li>
+      <li><a href="../#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study · Wix Studio · 2025</span>
+      <h1>Making AI code safe for people who don’t code.</h1>
+      <p class="lede">An AI assistant inside the Wix Studio editor writes custom code straight into live client sites. People were opening it, looking, and leaving. I found the four moments where trust was won or lost, and redesigned each one so the person stays in control of every change.</p>
+
+      <dl class="facts">
+        <div><dt>My role</dt><dd>Senior Product Designer, design lead for the assistant</dd></div>
+        <div><dt>I owned</dt><dd>User research, UX and UI, the AI’s behavior rules</dd></div>
+        <div><dt>Worked with</dt><dd>A product manager, an engineer, a BI analyst</dd></div>
+        <div><dt>Platform</dt><dd>Wix Studio, Velo (Wix’s code layer)</dd></div>
+      </dl>
+
+      <div class="tldr">
+        <div><h3>The problem</h3><p>Only 45% of people who opened the assistant sent a single message. In interviews, one failed attempt was enough to stop people coming back.</p></div>
+        <div><h3>What I did</h3><p>Moved help to where people already work, replaced the blank chat with a first step, let code apply instantly with undo, and rewrote how errors are explained.</p></div>
+        <div><h3>What happened</h3><p>In an 18-day A/B test, new users who had the assistant published live code more often: 4.8% vs 3.8% without it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom:72px">
+    <figure class="shot" style="margin:0">
+      <img src="../img/hero-editor.jpg" width="1600" height="935" alt="The Wix Studio editor with the AI Code Assistant panel open on the left. A user has asked it to show or hide an element when another element is clicked, and the assistant is analyzing the request.">
+    </figure>
+    <figcaption>The assistant lives in the Velo code panel of the editor, next to the site being edited.</figcaption>
+  </div>
+
+  <!-- CONTEXT -->
+  <section class="chapter" id="context">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">01 / Context</span>
+        <div>
+          <h2>The AI could write the code. People didn’t trust it enough to use it.</h2>
+          <p class="lede">The assistant writes code straight into live client websites. For a designer who doesn’t code, one bad change can break a client’s site, with no obvious way back.</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="side">Constraints I designed around</div>
+        <div class="grid-2">
+          <div class="card"><span class="k">Fixed placement</span><p>The product decision was that the chat had to live in the Velo code panel for now. So I couldn’t solve discovery by moving the panel. I had to bring entry points to the user instead.</p></div>
+          <div class="card"><span class="k">Dev Mode dependency</span><p>The assistant only works with Developer Mode on. We switched it on in the background when someone opened the assistant, so people landed in a code environment they hadn’t asked for.</p></div>
+          <div class="card"><span class="k">A short shelf life</span><p>A platform-wide Wix AI assistant was expected within about three months and might replace this one.</p></div>
+          <div class="card"><span class="k">Hard technical edges</span><p>The way Velo displays files made writing code across several files difficult, and a slow first response delayed the assistant’s intro message. I took both to our engineer to find a way around them.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section class="chapter" id="research">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">02 / Research</span>
+        <div>
+          <h2>Wix Partners build sites for clients, and don’t all write code.</h2>
+          <p class="lede">I interviewed 7 Wix Partners in July and August 2025, and paired what they told me with usage data from 7,448 people who opened the assistant.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <span class="k">Primary focus</span>
+          <h3>Designers</h3>
+          <p class="muted">Design and client work, little or no coding. Code feels risky to touch.</p>
+          <p><strong>Need:</strong> a result that works, without reading code.</p>
+          <p class="quote" style="font-size:17px">“Code is so overwhelming to me… But now, with the AI tool, it’s becoming a lot more approachable.”</p>
+          <p class="who small muted">Web designer, Wix Partner</p>
+        </div>
+        <div class="card">
+          <span class="k">Secondary</span>
+          <h3>Low-code users</h3>
+          <p class="muted">Handle simple code like animations and CMS tweaks. Hand complex work to a developer.</p>
+          <p><strong>Need:</strong> code that works the first time.</p>
+          <p class="quote" style="font-size:17px">“The main thing that I need from the AI Assistant is that the code would work.”</p>
+          <p class="who small muted">Low-code user, Wix Partner</p>
+        </div>
+        <div class="card">
+          <span class="k">Secondary</span>
+          <h3>Developers</h3>
+          <p class="muted">Build complex, data-heavy sites. Compare the assistant with ChatGPT and other AI tools.</p>
+          <p><strong>Need:</strong> speed, site context and results they can check.</p>
+          <p class="quote" style="font-size:17px">“I want a reliable, efficient tool that provides the solution that I’m looking for.”</p>
+          <p class="who small muted">Experienced developer, Wix Partner</p>
+        </div>
+      </div>
+
+      <div class="bignum" style="margin-top:56px">
+        <div><b>6 of 7</b><span>partners named the same top need: the code has to work.</span></div>
+        <div><b>5 of 7</b><span>asked for better error handling and a clearer picture of what the assistant can and can’t do.</span></div>
+        <div><b>51%</b><span>of conversations opened without a message ended with the person closing the assistant as their very next action.</span></div>
+      </div>
+
+      <div class="cols" style="margin-top:56px">
+        <div class="side">The insight</div>
+        <div class="text">
+          <p class="quote">“When you try something and it didn’t work, it’s very hard to come back to it. You have this stigma that it doesn’t really work.”</p>
+          <p class="who">Web designer who doesn’t code, Wix Partner</p>
+          <p style="margin-top:24px">Trust was the product. People valued undo above almost anything else because it let them experiment without fear, and they lost trust in a single failed attempt. So I stopped treating this as a chat design problem and asked a different question:</p>
+          <p class="lede" style="color:var(--ink);font-weight:550">How might we let people who don’t code add custom code to a live site, and feel in control of every change the AI makes?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOMENTS -->
+  <section class="chapter" id="moments">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">03 / The work</span>
+        <div>
+          <h2>Four moments where trust is won or lost.</h2>
+          <p class="lede">I followed people from “I want this on my site” to “it’s live”, found where they dropped off, and redesigned each of those moments.</p>
+        </div>
+      </div>
+
+      <!-- M1 -->
+      <article class="moment" id="m1">
+        <span class="tag">03.1</span><span class="muted small">Moment 1 of 4 · Finding help</span>
+        <h3>Help where you’re already working</h3>
+        <div class="steps">
+          <div class="card"><span class="k">What I saw</span><p>80% of conversations started from the right-click menu or the element’s Inspector panel, while someone was editing a specific element, not while thinking about code.</p></div>
+          <div class="card"><span class="k">The choice</span><p>Since the chat had to stay in the code panel, I couldn’t make the panel easier to find. Instead I brought the way in to the element people were already pointing at, with that element passed in as context.</p></div>
+          <div class="card"><span class="k">What the data said next</span><p>Intent showed in the numbers. About half of the conversations started from the properties and CSS panels led to added code, compared with about a quarter from the right-click menu. That made the case for more entry points where people are already working.</p></div>
+        </div>
+        <div class="grid-2">
+          <figure style="margin:0"><div class="shot"><img src="../img/m1-rightclick.jpg" width="1096" height="643" loading="lazy" alt="Right-click menu on a page element, with the last item 'Add Custom Behavior with AI' highlighted."></div><figcaption>Right-click any element: “Add Custom Behavior with AI”.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/m1-panel.jpg" width="1097" height="619" loading="lazy" alt="The element's Animations and Effects panel, with a Custom Styling section and a 'Customize with AI' link at the bottom."></div><figcaption>In the properties panel, where built-in options run out: “Customize with AI”.</figcaption></figure>
+        </div>
+      </article>
+
+      <!-- M2 -->
+      <article class="moment" id="m2">
+        <span class="tag">03.2</span><span class="muted small">Moment 2 of 4 · The first message</span>
+        <h3>A first step instead of a blank box</h3>
+        <div class="grid-2" style="align-items:start">
+          <div>
+            <div class="card" style="margin-bottom:16px"><span class="k">What I saw</span><p>Only 45% of people who opened the assistant sent a first message. The empty chat was the biggest drop-off in the whole funnel. Of the people who didn’t write anything, half simply closed it.</p><p>Partners told me the same thing in their own words: they weren’t sure what to ask, or whether their prompt was good enough.</p></div>
+            <div class="card" style="margin-bottom:16px"><span class="k">The choice</span><p>Open with ready-made requests instead of an empty box, drawn from what people ask for most. The top conversation subjects were styling and layout (32%), animations (16%) and event-based interactions (16%), and the suggestions follow them: show or hide an element on click, animate on hover, display CMS content, and style custom CSS.</p><p>Some people who skipped the chat went straight to coding by hand (about 10% of those conversations), so I added a clear way out for them: “Prefer manual coding?”.</p></div>
+            <div class="status pending"><b>Status</b><span>[Placeholder: post-launch first-message rate, waiting on Hadara. If it isn’t available, this reads: “This was the next bet. Success means more than 45% of people who open the assistant send a first message.”]</span></div>
+          </div>
+          <figure style="margin:0"><div class="shot" style="padding:20px"><img src="../img/m2-panel.jpg" width="666" height="1148" loading="lazy" alt="The assistant panel opening with a greeting and four suggested requests: show or hide an element when another element is clicked, use an animation when an element is hovered over, display content from a CMS collection in an element, and style custom CSS. Below, a 'Prefer manual coding?' section with a 'Start coding manually' button." style="max-height:640px;width:auto"></div><figcaption>The panel opens with four requests drawn from real conversations, and a way out for people who’d rather write code themselves.</figcaption></figure>
+        </div>
+      </article>
+
+      <!-- M3 -->
+      <article class="moment" id="m3">
+        <span class="tag">03.3</span><span class="muted small">Moment 3 of 4 · Applying code</span>
+        <h3>Apply instantly, undo anytime</h3>
+        <div class="text">
+          <p>The first version asked people to review the code and then choose to add it. For a developer that’s a sensible gate. For a designer it’s a question they can’t answer: they can’t judge code, so the gate made them feel responsible for something they couldn’t see.</p>
+          <p>I moved the safety net to <em>after</em> the change. Code applies right away, with a plain-language summary, a preview, and a one-click restore.</p>
+        </div>
+
+        <div class="grid-2" style="margin-top:28px">
+          <figure style="margin:0">
+            <div class="ui-stage">
+              <div class="ui"><div class="p">
+                <div class="hdr"><span class="spark">✦</span> AI Assistant</div>
+                <div>Sure! I would add an animation to <span class="hash">#shape1</span> that scale and spin it 360 degree when hovering it and reverse the animation when hovering out.</div>
+                <div class="row-btns"><span class="ghost">Show code</span><span class="b dim">Add code</span></div>
+              </div></div>
+            </div>
+            <figcaption><strong style="color:var(--ink)">Before:</strong> review the code, then choose to add it. A gate most designers couldn’t judge.</figcaption>
+          </figure>
+          <figure style="margin:0">
+            <div class="ui-stage">
+              <div class="ui"><div class="p">
+                <div class="box">
+                  <div class="hdr" style="margin-bottom:6px"><span class="ok">✓</span> Generated Code</div>
+                  <div style="color:#5b6670">I’ve added a code that scale and spin <span class="hash">#shape1</span> 360 degrees while hovering it and reverse when hovering out.</div>
+                </div>
+                <div>Let me know if there’s anything else I can help you customize.</div>
+                <div class="row-btns"><span class="b fill">Preview</span></div>
+                <div class="foot"><span>Not what you wanted? Restore your code to the previous state.</span><span class="lnk">Restore ⓘ</span></div>
+              </div></div>
+            </div>
+            <figcaption><strong style="color:var(--ink)">After:</strong> the change is already applied, explained in plain words, with preview and restore one click away.</figcaption>
+          </figure>
+        </div>
+        <p class="redrawn">Cards redrawn from the shipped design so the text is readable. The copy is unchanged.</p>
+
+        <div class="cols" style="margin-top:40px">
+          <div class="side">Trade-off</div>
+          <div class="text">
+            <p>Applying first means the AI sometimes changes something the person didn’t want. I accepted that because the alternative, a gate people couldn’t judge, was already stopping them. The cost had to be made cheap: every change is undoable, and nothing is lost.</p>
+          </div>
+        </div>
+
+        <div class="cols" style="margin-top:32px">
+          <div class="side">Iteration</div>
+          <div class="text">
+            <p>The first build of restore broke the promise. When I tested it in May 2025 I logged six problems for the team, including:</p>
+            <ul>
+              <li>Every restore created a new version called “restored code”, whichever version you picked, so you couldn’t tell what you’d gone back to.</li>
+              <li>Restoring one version silently removed every change made after it.</li>
+              <li>After undoing AI code with restore, you could no longer get back to the version that had the code.</li>
+              <li>A restored version looked like any other version, so you could “restore a restore”.</li>
+            </ul>
+            <p>The fixes became the history view: every change is dated and summarized, labeled as a code version with a description, with undo and preview always in reach.</p>
+          </div>
+        </div>
+        <figure style="margin:28px 0 0;max-width:760px"><div class="shot"><img src="../img/m3-history.jpg" width="727" height="406" loading="lazy" alt="The editor with the Chat History panel open, listing dated changes with short summaries, and undo and preview actions on the latest one."></div><figcaption>The history view: every change dated and summarized, with undo and preview.</figcaption></figure>
+      </article>
+
+      <!-- M4 -->
+      <article class="moment" id="m4">
+        <span class="tag">03.4</span><span class="muted small">Moment 4 of 4 · When code breaks</span>
+        <h3>When code breaks, say why and what’s next</h3>
+        <div class="grid-2" style="align-items:start">
+          <div>
+            <p>Generic errors like “Something unexpected happened” made people give up. One designer said it felt like the assistant “kind of gave up on my request.” Each error now says what went wrong in plain words and offers one next step: retry, add a permission, or get support.</p>
+            <p>Behind the messages, I wrote the rules for when the AI should try to fix things on its own. The golden rule:</p>
+            <p class="lede" style="color:var(--ink);font-weight:600">Only auto-fix if it’s obvious, reversible and safe. Otherwise, guide.</p>
+          </div>
+          <figure style="margin:0">
+            <div class="ui-stage">
+              <div class="ui">
+                <div class="err-h"><i>!</i> 3 errors require your attention</div>
+                <div class="err"><b>We couldn’t compile your code</b><p>The AI assistant ran into syntax errors it could not fix while compiling your code. Please go to Problems tab to fix them manually.</p><div class="act"><span>↻ Retry</span></div></div>
+                <div class="err"><b>Required permission not applied</b><p>The AI couldn’t apply the required app permission. This may expose the site to potential security issues.</p><div class="act"><span>Add Permissions</span></div></div>
+                <div class="err"><b>System unstable</b><p>This is an alpha product, some things may not work as expected.</p><div class="act"><span>Support</span></div></div>
+              </div>
+            </div>
+            <p class="redrawn">Redrawn from the shipped design for legibility.</p>
+          </figure>
+        </div>
+
+        <h3 style="font-size:20px;margin:40px 0 16px">When the AI should not fix things by itself</h3>
+        <ol class="rules">
+          <li><b>1. Critical context is missing</b>For example, database credentials it doesn’t have. <i>“I don’t have enough information to safely fix this. Let’s walk through it together.”</i></li>
+          <li><b>2. It would have to invent elements, IDs or files</b>Adding unknown elements can break layouts, and intent is unclear. <i>“Before I add anything, let’s make sure this is what you want.”</i></li>
+          <li><b>3. The action is destructive or can’t be undone</b>Deleting data, resetting configuration, changing a schema. <i>Explicit confirmation, or share with a developer.</i></li>
+          <li><b>4. It touches security</b>API keys, admin roles, access controls. <i>“For security reasons, I can’t make this change automatically.”</i></li>
+          <li><b>5. The choice is subjective</b>Fade in from the left or the right? Version 1.2 or 2.0? <i>“There are multiple ways to solve this. Want to see the options?”</i></li>
+        </ol>
+
+        <div class="status" style="margin-top:28px"><b>What I’d change</b><span>The first error still tells people to go to the Problems tab and fix it manually. That works for a developer, but it’s the kind of dead end my own research warned about for designers. The next version should offer a guided step, or a way to hand the problem to a developer.</span></div>
+
+        <figure style="margin:32px 0 0"><div class="shot"><img src="../img/m4-ide.jpg" width="1400" height="807" loading="lazy" alt="The error list shown next to the code editor, with the project file tree and an open TypeScript file."></div><figcaption>The errors in context, next to the code editor.</figcaption></figure>
+      </article>
+    </div>
+  </section>
+
+  <!-- OUTCOME -->
+  <section class="chapter" id="outcome">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">04 / Outcome</span>
+        <div>
+          <h2>More people changing code, and more code going live.</h2>
+          <p class="lede">We ran an A/B test on new English-speaking users for 18 days: 5,422 without the assistant and 5,270 with it. Then we followed every step of the funnel after launch.</p>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr><th>Share of new users who…</th><th class="n">Without assistant</th><th class="n">With assistant</th><th class="n">Change</th></tr></thead>
+          <tbody>
+            <tr><td>Changed their site’s code</td><td class="n">4.7% <span class="muted">(255)</span></td><td class="n">6.3% <span class="muted">(324)</span></td><td class="n"><strong>+34%</strong></td></tr>
+            <tr><td>Published working code to their live site</td><td class="n">3.8% <span class="muted">(209)</span></td><td class="n">4.8% <span class="muted">(252)</span></td><td class="n"><strong>+27%</strong></td></tr>
+            <tr><td>Turned on Dev Mode <span class="muted small">(see note)</span></td><td class="n">9.8% <span class="muted">(531)</span></td><td class="n">14.0% <span class="muted">(738)</span></td><td class="n">+43%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2" style="margin-top:28px">
+        <div class="card"><span class="k">How to read this</span><p>The test compared having the assistant with not having it, so it measures the whole feature, not each design decision on its own. The funnel below is where I tracked individual moments.</p></div>
+        <div class="card warn"><span class="k">Dev Mode note</span><p>[Placeholder, waiting on Hadara: during the test, opening the assistant may have switched Dev Mode on automatically. If so, part of this +43% is mechanical, and the line will say so.]</p></div>
+      </div>
+
+      <div class="cols" style="margin-top:28px">
+        <div class="side">What surprised us</div>
+        <div class="text"><p>With the assistant, a slightly smaller share of Dev Mode users went on to change code (43.9% vs 48.0%). More people were arriving in Dev Mode who hadn’t chosen to code. Looking at the step that matters for them, sending a message, 49% went on to change code. That pointed us back to the first message.</p></div>
+      </div>
+
+      <div class="grid-2" style="margin-top:56px;align-items:start">
+        <div>
+          <span class="eyebrow" style="color:var(--ink-3)">Funnel after launch, 30 days</span>
+          <ol class="funnel">
+            <li><div class="row"><span>Opened the assistant</span><b>7,041</b></div><div class="bar" style="width:100%"></div></li>
+            <li><div class="row"><span>Sent a first message <span class="drop">45% continue</span></span><b>3,167</b></div><div class="bar" style="width:45%"></div></li>
+            <li><div class="row"><span>Code generated <span class="cont">81% continue</span></span><b>2,556</b></div><div class="bar" style="width:36.3%"></div></li>
+            <li><div class="row"><span>Code added to the site <span class="cont">75% continue</span></span><b>1,919</b></div><div class="bar" style="width:27.3%"></div></li>
+            <li><div class="row"><span>Code went live <span class="cont">82% continue</span></span><b>1,568</b></div><div class="bar" style="width:22.3%"></div></li>
+          </ol>
+          <p class="small muted">Once people sent a first message, 75–82% moved on at every step. The real drop was the empty chat, which is why the next round focused on that first step.</p>
+        </div>
+        <div>
+          <div class="bignum" style="grid-template-columns:1fr 1fr">
+            <div><b>2,198</b><span>people changed their site’s code through the assistant.</span></div>
+            <div><b>84</b><span>people used restore to roll back AI code. The safety net was used.</span></div>
+          </div>
+          <div class="card" style="margin-top:24px"><span class="k">What people asked for changed</span><p>After rollout, styling and layout became the top subject, up from 19% to 32% of conversations. People were bringing smaller, everyday design tasks, not only “real code” jobs. That’s the audience we designed for.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT -->
+  <section class="chapter" id="next">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">05 / What’s next</span>
+        <div>
+          <h2>What the research told us to do next</h2>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card"><h3>Solve it without code when possible</h3><p class="muted">Partners asked the assistant to point them to existing Wix features (like data binding) before writing code. Code should be the last resort, not the first.</p></div>
+        <div class="card"><h3>Make AI code traceable</h3><p class="muted">“I want to see AI-applied code in a different color, so I can remove it if needed without breaking other things.” Group, label and roll back AI changes as a unit.</p></div>
+        <div class="card"><h3>Match tone to skill</h3><p class="muted">Beginners found developer jargon intimidating. Let people set their comfort level once, and adjust language and detail to it.</p></div>
+      </div>
+
+      <div class="cols" style="margin-top:56px">
+        <div class="side">In their words</div>
+        <div class="text">
+          <p class="quote">“I want to take baby steps with it just because code is so overwhelming to me and intimidating to a certain degree. But now, with the AI tool, it’s becoming a lot more, I guess, approachable.”</p>
+          <p class="who">Web designer who doesn’t code, Wix Partner</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap next" style="border-top:1px solid var(--line)">
+    <a class="btn" href="../">← All work</a>
+    <a class="btn primary" href="mailto:hadar.kellner@gmail.com">Get in touch</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>Hadar Kellner · Senior Product Designer</span>
+    <span><a href="mailto:hadar.kellner@gmail.com">hadar.kellner@gmail.com</a> · <a href="https://www.linkedin.com/in/hadar-kellner-950209128/" target="_blank" rel="noopener">LinkedIn</a> · <a href="../../Hadar-Kellner-CV.pdf">CV</a></span>
+  </div>
+</footer>
+</body>
+</html>
