@@ -223,3 +223,6 @@ table.data th.n{text-align:right}
 .next{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:40px 0}
 
 .grid-2:has(.shot),.grid-3:has(.shot){grid-template-columns:1fr}
+.grid-2.side:has(.shot){grid-template-columns:1fr 1fr}
+@media (max-width:860px){.grid-2.side:has(.shot){grid-template-columns:1fr}}
+.side .shot img{width:100%}
