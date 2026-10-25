@@ -1,4 +1,5 @@
-// Click any case-study screenshot to view it full size. Uses data-zoom when a larger file exists.
+// Click any case-study screenshot to view it full size, never larger than its real resolution.
+// data-zoom points to a larger file; data-real gives the true pixel width when a file was upscaled.
 (function () {
   var imgs = document.querySelectorAll('main .shot img, main img[data-zoom]');
   imgs.forEach(function (img) {
@@ -21,6 +22,10 @@
     var big = document.createElement('img');
     big.src = img.dataset.zoom || img.currentSrc || img.src;
     big.alt = img.alt;
+    big.addEventListener('load', function () {
+      var real = +img.dataset.real || big.naturalWidth;
+      big.style.width = real + 'px';
+    });
     var close = document.createElement('button');
     close.type = 'button';
     close.setAttribute('aria-label', 'Close');
