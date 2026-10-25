@@ -6,7 +6,7 @@
 <title>SafeBreach · Hadar Kellner</title>
 <meta name="description" content="Case study: designing SafeBreach's breach-and-attack simulation platform, its integration with Splunk Mission Control, and a new design system.">
 <link rel="preload" href="../fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=5">
+<link rel="stylesheet" href="../style.css?v=6">
 <style>
   .notes{list-style:none;padding:0;margin:0;display:grid;gap:12px}
   .notes li{border-left:2px solid var(--accent);padding:2px 0 2px 14px;font-size:15.5px}
@@ -75,8 +75,8 @@
         <span class="tag">01.2</span><span class="muted small">Before and between tests</span>
         <h3>States, not just a happy path</h3>
         <div class="grid-2">
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/up-next.jpg" width="1920" height="1082" loading="lazy" alt="Main screen before a test starts: 'Up Next: Infiltration Europe' with a countdown, a large Start Now button, and the categories, attack types and simulators that will be tested, shown dimmed."></div><figcaption><strong style="color:var(--ink)">Up next.</strong> Before a test starts, the same layout previews what will be tested, with a countdown and Start Now.</figcaption></figure>
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/on-scroll.jpg" width="1920" height="1082" loading="lazy" alt="Main screen after scrolling: the header collapses into one bar with the running test's name, simulation count, timer, pause and stop. The queue ends with 'You've reached the end of the queue' and three shortcuts: Test your grid, Plan security tests, Create custom attacks."></div><figcaption><strong style="color:var(--ink)">On scroll.</strong> The header collapses to one bar with the running test and its controls. The end of the queue offers three next steps: test, plan or create.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/up-next.jpg" width="1920" height="1082" loading="lazy" alt="Main screen before a test starts: 'Up Next: Infiltration Europe' with a countdown, a large Start Now button, and the categories, attack types and simulators that will be tested, shown dimmed."></div><figcaption><strong style="color:var(--ink)">Up next.</strong> Before a test starts, the same layout previews what will be tested, with a countdown and Start Now.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/on-scroll.jpg" width="1920" height="1082" loading="lazy" alt="Main screen after scrolling: the header collapses into one bar with the running test's name, simulation count, timer, pause and stop. The queue ends with 'You've reached the end of the queue' and three shortcuts: Test your grid, Plan security tests, Create custom attacks."></div><figcaption><strong style="color:var(--ink)">On scroll.</strong> The header collapses to one bar with the running test and its controls. The end of the queue offers three next steps: test, plan or create.</figcaption></figure>
         </div>
       </article>
     </div>
@@ -101,8 +101,8 @@
         <span class="tag">02.1</span><span class="muted small">Inside a notable</span>
         <h3>From “no results” to a risk score in one click</h3>
         <div style="display:grid;gap:28px">
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-notable-empty.jpg" width="1280" height="720" loading="lazy" alt="Splunk Mission Control notables list with one row expanded to a SafeBreach tab: 'No Results Detected… Run SafeBreach Incident Response Blast Radius Analysis Test', a Run Now button and a Go to SafeBreach link."></div><figcaption><strong style="color:var(--ink)">Empty state.</strong> If the host hasn’t been tested, the tab offers one action: run a blast radius test now, or go to SafeBreach.</figcaption></figure>
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-notable.jpg" width="1280" height="720" loading="lazy" alt="The same expanded notable with results: status breakdown donut, security control performance for Palo Alto, Cylance and Cybereason, and a blast radius line from external attacker to the host at 55% risk to 3 critical segments."></div><figcaption><strong style="color:var(--ink)">With results.</strong> Status breakdown, how each security control performed, and the blast radius: from an external attacker, through this host (55% risk), to critical segments.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/splunk-notable-empty.jpg" width="1280" height="720" loading="lazy" alt="Splunk Mission Control notables list with one row expanded to a SafeBreach tab: 'No Results Detected… Run SafeBreach Incident Response Blast Radius Analysis Test', a Run Now button and a Go to SafeBreach link."></div><figcaption><strong style="color:var(--ink)">Empty state.</strong> If the host hasn’t been tested, the tab offers one action: run a blast radius test now, or go to SafeBreach.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/splunk-notable.jpg" width="1280" height="720" loading="lazy" alt="The same expanded notable with results: status breakdown donut, security control performance for Palo Alto, Cylance and Cybereason, and a blast radius line from external attacker to the host at 55% risk to 3 critical segments."></div><figcaption><strong style="color:var(--ink)">With results.</strong> Status breakdown, how each security control performed, and the blast radius: from an external attacker, through this host (55% risk), to critical segments.</figcaption></figure>
         </div>
       </article>
 
@@ -110,7 +110,7 @@
         <span class="tag">02.2</span><span class="muted small">Drilldown</span>
         <h3>From exposure to action</h3>
         <div class="grid-2" style="align-items:start">
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/splunk-drilldown.jpg" width="1280" height="720" loading="lazy" alt="Investigation drilldown with a SafeBreach tab: status breakdown, security control performance, host-level attack surface by MITRE tactic as a colored bar chart, a mitigation insights table with Mitigate buttons, and a blast radius radar chart linking the host to PCI segment, payment application and production database."></div></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/splunk-drilldown.jpg" width="1280" height="720" loading="lazy" alt="Investigation drilldown with a SafeBreach tab: status breakdown, security control performance, host-level attack surface by MITRE tactic as a colored bar chart, a mitigation insights table with Mitigate buttons, and a blast radius radar chart linking the host to PCI segment, payment application and production database."></div></figure>
           <ul class="notes">
             <li><b>Attack surface by MITRE tactic</b>The host’s exposure across tactics from initial access to impact, colored by severity.</li>
             <li><b>Mitigation insights</b>What the simulations found, with severity, control, target and number of attackers, and a Mitigate button on every row.</li>
@@ -137,9 +137,9 @@
         </div>
       </div>
       <div class="grid-2" style="align-items:start">
-        <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/ds-components.jpg" width="1440" height="1740" loading="lazy" alt="Component sheet: large, medium and small buttons in each state, links, icon buttons, tabs, toggles and checkboxes, input fields, dropdowns and split buttons."></div><figcaption>Buttons, inputs, tabs, dropdowns and split buttons, each in every state.</figcaption></figure>
+        <figure style="margin:0"><div class="shot"><img src="../img/safebreach/ds-components.jpg" width="1440" height="1740" loading="lazy" alt="Component sheet: large, medium and small buttons in each state, links, icon buttons, tabs, toggles and checkboxes, input fields, dropdowns and split buttons."></div><figcaption>Buttons, inputs, tabs, dropdowns and split buttons, each in every state.</figcaption></figure>
         <div>
-          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/safebreach/ds-feedback.jpg" width="1440" height="390" loading="lazy" alt="Alert components for error, warning, success and confirmation, with notes: alerts always sit at the top of the screen; some errors are permanent and have no close button; success messages close on a timer but can also be closed manually."></div><figcaption>Rules, not just styles.</figcaption></figure>
+          <figure style="margin:0"><div class="shot"><img src="../img/safebreach/ds-feedback.jpg" width="1440" height="390" loading="lazy" alt="Alert components for error, warning, success and confirmation, with notes: alerts always sit at the top of the screen; some errors are permanent and have no close button; success messages close on a timer but can also be closed manually."></div><figcaption>Rules, not just styles.</figcaption></figure>
           <ul class="notes" style="margin-top:20px">
             <li><b>Alerts always sit at the top</b>A dismissible alert covers the content. One that can’t be dismissed pushes the content down.</li>
             <li><b>Some errors stay</b>Permanent errors have no close button.</li>
@@ -162,6 +162,5 @@
     <span><a href="mailto:hadar.kellner@gmail.com">hadar.kellner@gmail.com</a> · <a href="https://www.linkedin.com/in/hadar-kellner-950209128/" target="_blank" rel="noopener">LinkedIn</a> · <a href="../Hadar-Kellner-CV.pdf">CV</a></span>
   </div>
 </footer>
-<script src="../zoom.js?v=2" defer></script>
 </body>
 </html>
