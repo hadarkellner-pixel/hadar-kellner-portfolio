@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Datagen · Hadar Kellner</title>
+<meta name="description" content="Case study: designing Datagen's self-serve platform for generating synthetic data for computer vision.">
+<link rel="preload" href="../fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .journey{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .journey .lane{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+  .journey ol{list-style:none;margin:10px 0 0;padding:0}
+  .journey li{padding:10px 12px;border-radius:8px;background:var(--sunk);margin-bottom:8px;font-size:15px;position:relative}
+  .journey li:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);font-size:12px;color:var(--ink-3);z-index:1}
+  .notes{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .notes li{border-left:2px solid var(--accent);padding:2px 0 2px 14px;font-size:15.5px}
+  .notes b{display:block}
+  @media (max-width:860px){.journey{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="name" href="../">Hadar Kellner</a>
+    <ul>
+      <li><a href="../#work" aria-current="page">Work</a></li>
+      <li><a href="../#about">About</a></li>
+      <li class="hide-s"><a href="../Hadar-Kellner-CV.pdf">CV</a></li>
+      <li><a href="../#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="cs-hero">
+    <div class="wrap">
+      <span class="eyebrow">Case study · Datagen · 2021–2023</span>
+      <h1>Synthetic data for computer vision, in a few clicks instead of months.</h1>
+      <p class="lede">Datagen generates human-centric synthetic data for training computer vision models. I led design of its self-serve platform: the place where engineers browse, tweak and order datasets, and the bridge to the SDK they use for more control.</p>
+
+      <dl class="facts">
+        <div><dt>My role</dt><dd>Product Design Lead</dd></div>
+        <div><dt>I owned</dt><dd>End-to-end UX of the platform, user research, the design system (built with the team)</dd></div>
+        <div><dt>Worked with</dt><dd>Product management, R&amp;D and the 3D team</dd></div>
+        <div><dt>Users</dt><dd>Computer vision and machine learning engineers</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom:72px">
+    <figure class="shot" style="margin:0">
+      <img src="../img/datagen/cover.jpg" width="654" height="544" alt="The Datagen platform home screen on a desktop monitor: two cards asking what to generate today, and a table of dataset requests." style="width:min(100%,560px)">
+    </figure>
+    <figcaption>The Datagen self-serve platform.</figcaption>
+  </div>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">01 / The problem</span>
+        <div>
+          <h2>Getting good training data took months.</h2>
+          <p class="lede">Computer vision engineers need clean, labeled, secure and legal datasets. Collecting and labeling that data by hand is slow and expensive, and can take months or even years. Datagen’s answer was a self-serve platform and an SDK that let engineers get precise, fully labeled, compliant synthetic data with a few clicks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">02 / Who it’s for</span>
+        <div>
+          <h2>Three kinds of engineers, from clicking to coding.</h2>
+          <p class="lede">Before designing, I mapped the roles involved in getting synthetic data into a computer vision pipeline. The sharpest difference between them wasn’t seniority. It was <em>how</em> they wanted to work.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><span class="k">Prefers the platform</span><h3>Data scientist</h3><p class="muted">Strong in Python and statistics. Wants to generate data and drop it into ML pipelines quickly.</p><p><strong>Needs:</strong> graphical tools and ready-made functions, so they can experiment without extensive coding.</p></div>
+        <div class="card accent"><span class="k">Uses both</span><h3>Computer vision expert</h3><p class="muted">Deep knowledge of image processing and camera models. Not yet convinced synthetic data is as good as real-world data.</p><p><strong>Needs:</strong> the platform for basic datasets, and the SDK for fine-tuning complex scenes.</p></div>
+        <div class="card"><span class="k">Prefers the SDK</span><h3>Machine learning engineer</h3><p class="muted">Works in TensorFlow and PyTorch. Cares about training and evaluation running smoothly.</p><p><strong>Needs:</strong> direct programmatic access, for flexibility and control inside their own workflows.</p></div>
+      </div>
+
+      <div class="cols" style="margin-top:48px">
+        <div class="side">What it meant</div>
+        <div class="text">
+          <p>One product couldn’t serve all three. The research led to three connected tools: the <strong>self-serve platform</strong>, the <strong>SDK</strong>, and the <strong>SDK documentation</strong>. I designed the platform. I had very little to do with the SDK’s design, but I had to know how to use it and reference it in the platform, so people could move from one to the other.</p>
+        </div>
+      </div>
+      <figure style="margin:32px 0 0"><div class="shot"><img src="../img/datagen/tools.jpg" width="1094" height="250" loading="lazy" alt="Three screens side by side: the self-serve platform, a code editor using the SDK, and the SDK documentation site."></div><figcaption>Self-serve platform, SDK, SDK documentation.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">03 / The journey</span>
+        <div>
+          <h2>Two paths that meet in the same data.</h2>
+          <p class="lede">People came in through the website and the platform. After becoming paying customers they got a customer-success kickoff, then split by how they liked to work.</p>
+        </div>
+      </div>
+      <div class="journey">
+        <div class="lane"><span class="k" style="font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Getting started</span><ol><li>Website</li><li>Platform</li><li>Becomes a paying customer</li><li>Customer-success kickoff</li></ol></div>
+        <div class="lane"><span class="k" style="font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Platform path</span><ol><li>Choose a modality</li><li>Basic controls</li><li>Data management</li><li>Support by email</li></ol></div>
+        <div class="lane"><span class="k" style="font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">SDK path</span><ol><li>SDK and documentation</li><li>Advanced controls</li><li>Automation</li><li>Support by Slack</li></ol></div>
+      </div>
+      <p class="small muted" style="margin-top:16px">The SDK path loops back: documentation sends people back to the platform, and SDK users still manage their data there.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">04 / The design</span>
+        <div>
+          <h2>A catalog you can browse, with the code one click away.</h2>
+          <p class="lede">I worked closely with product, R&amp;D and the 3D team through research, personas and journey maps, card sorting and user flows, paper wireframes, prototypes and usability checks.</p>
+        </div>
+      </div>
+
+      <article class="moment">
+        <span class="tag">04.1</span><span class="muted small">Home</span>
+        <h3>Start something new, or check on what’s cooking</h3>
+        <div class="grid-2" style="align-items:start">
+          <ul class="notes">
+            <li><b>“What would you like to generate today?”</b>The two main products (Humans, and Humans in Context) are the first thing you see, each with its use cases.</li>
+            <li><b>Datasets table</b>The status of your latest data requests, from queued to ready to download. Generation can take days, so status is front and center.</li>
+            <li><b>DGU hours bank</b>Tells you how much data you can still generate.</li>
+            <li><b>Additional materials</b>GitHub, documentation, Jupyter notebooks and tutorials, for people who want to go deeper or are on their way to the SDK.</li>
+          </ul>
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/datagen/home.jpg" width="804" height="506" loading="lazy" alt="Datagen home screen."></div></figure>
+        </div>
+      </article>
+
+      <article class="moment">
+        <span class="tag">04.2</span><span class="muted small">Asset generation</span>
+        <h3>See what you’ll get before you ask for it</h3>
+        <div class="grid-2" style="align-items:start">
+          <figure style="margin:0"><div class="shot" style="padding:14px"><img src="../img/datagen/assets.jpg" width="804" height="512" loading="lazy" alt="Humans catalog: a tree of attributes on the left (identities, eyes, eyebrows, facial hair, hairstyles, glasses, masks, hats, clothing, backgrounds), a grid of synthetic faces in the middle, and on the right a large preview with an SDK code snippet underneath."></div></figure>
+          <ul class="notes">
+            <li><b>Catalog navigation</b>Every attribute you can change (head, accessories, background) in one tree, with explore controls that show what each change does.</li>
+            <li><b>Query with inline guidance</b>Helps people narrow the search to the exact assets they want to generate.</li>
+            <li><b>Assets preview</b>Shows every asset the request will generate. The query controls how many.</li>
+            <li><b>Sample image</b>A zoomed-in preview of what you asked for.</li>
+            <li><b>Controls as code</b>The panel shows the SDK code that produces the selection. You can tweak it, or copy it into the SDK for more flexible use. That snippet is the bridge between the two paths.</li>
+            <li><b>Request content</b>One clear call to action to turn the selection into a dataset request.</li>
+          </ul>
+        </div>
+      </article>
+
+      <figure style="margin:56px 0 0"><div class="shot"><img src="../img/datagen/wireframes.jpg" width="1394" height="928" loading="lazy" alt="A spread of high-fidelity wireframes of the platform's screens around a laptop."></div><figcaption>High-fidelity wireframes.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">05 / Design system</span>
+        <div>
+          <h2>One system, light and dark.</h2>
+          <p class="lede">I built a design system with both light and dark themes, together with the team. It made onboarding new designers easier, made it simple to roll the rebranded colors across the platform, and gave us a shared language with front-end about how components and colors should be used.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <figure style="margin:0"><div class="shot"><img src="../img/datagen/system.jpg" width="1144" height="878" loading="lazy" alt="Design system boards: colors, text styles, inputs, buttons and components around a screen split between dark and light themes."></div><figcaption>Colors, type, inputs, buttons and components.</figcaption></figure>
+        <figure style="margin:0"><div class="shot"><img src="../img/datagen/themes.jpg" width="1160" height="688" loading="lazy" alt="Several platform screens in the dark theme, including the asset catalog and the datasets table."></div><figcaption>The platform in the dark theme.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">06 / Leading the team</span>
+        <div>
+          <h2>Beyond the screens</h2>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h3>Leading design</h3><p class="muted">I led and mentored the design team, and owned the platform’s UX end to end.</p></div>
+        <div class="card"><h3>Shaping the product</h3><p class="muted">I defined product vision together with product, engineering, research, marketing and sales, guided by research and product data.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap next" style="border-top:1px solid var(--line)">
+    <a class="btn" href="../">← All work</a>
+    <a class="btn primary" href="../wix-ai-code-assistant/">Next: Wix AI Code Assistant →</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>Hadar Kellner · Senior Product Designer</span>
+    <span><a href="mailto:hadar.kellner@gmail.com">hadar.kellner@gmail.com</a> · <a href="https://www.linkedin.com/in/hadar-kellner-950209128/" target="_blank" rel="noopener">LinkedIn</a> · <a href="../Hadar-Kellner-CV.pdf">CV</a></span>
+  </div>
+</footer>
+</body>
+</html>
