@@ -126,16 +126,13 @@ figcaption{font-size:14.5px;color:var(--ink-3);margin-top:12px;line-height:1.5}
 .shot+figcaption{padding:0 4px}
 .shot.fill{padding:0;overflow:hidden}
 .shot.fill img{width:100%;border-radius:0;box-shadow:none}
-.mag{position:relative;display:block;width:100%;padding:0;border:0;background:none;font:inherit;cursor:zoom-in}
-.mag:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.mag img{display:block}
-.mag-lens{position:absolute;width:240px;height:240px;border-radius:50%;border:3px solid #fff;box-shadow:0 10px 36px rgb(0 0 0 / .35);background-repeat:no-repeat;background-color:#fff;pointer-events:none;opacity:0;transition:opacity .15s;z-index:4}
-.mag:hover .mag-lens{opacity:1}
-.mag-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);margin-top:10px}
-.mag-view{position:fixed;inset:0;z-index:100;background:rgb(8 10 14 / .94);overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:56px 12px 24px;cursor:zoom-out}
-.mag-view img{max-width:none;width:min(1206px,220vw);height:auto;border-radius:6px}
-.mag-view button{position:fixed;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:1px solid #3a4150;background:#0e1116;color:#e8eaf0;font-size:20px;cursor:pointer}
-@media (hover:none){.mag-lens{display:none}}
+.zoomable{display:block;width:100%;padding:0;border:0;background:none;font:inherit;cursor:zoom-in}
+.zoomable img{transition:opacity .2s}
+.zoomable:hover img{opacity:.88}
+.zoomable:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.zoom-view{position:fixed;inset:0;z-index:100;background:rgb(8 10 14 / .97);display:flex;align-items:center;justify-content:center;padding:56px 16px 16px;cursor:zoom-out}
+.zoom-view img{max-width:100%;max-height:calc(100vh - 72px);width:auto;height:auto;object-fit:contain;border-radius:6px;box-shadow:0 20px 60px rgb(0 0 0 / .5)}
+.zoom-view button{position:fixed;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid #3a4150;background:#0e1116;color:#e8eaf0;font-size:22px;line-height:1;cursor:pointer}
 
 .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin:48px 0 0}
 .tldr>div{padding:22px 24px;border-right:1px solid var(--line)}
