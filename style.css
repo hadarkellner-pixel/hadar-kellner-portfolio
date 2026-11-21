@@ -125,6 +125,8 @@ strong{font-weight:650}
 figcaption{font-size:14.5px;color:var(--ink-3);margin-top:12px;line-height:1.5}
 .shot+figcaption{padding:0 4px}
 .shot.fill img{width:100%}
+.shot.slim{border-radius:10px;padding:5px}
+.shot.slim img{border-radius:6px}
 .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin:48px 0 0}
 .tldr>div{padding:22px 24px;border-right:1px solid var(--line)}
 .tldr>div:last-child{border-right:0}
