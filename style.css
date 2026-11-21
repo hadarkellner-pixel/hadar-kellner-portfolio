@@ -125,9 +125,9 @@ strong{font-weight:650}
 figcaption{font-size:14.5px;color:var(--ink-3);margin-top:12px;line-height:1.5}
 .shot+figcaption{padding:0 4px}
 .shot.fill img{width:100%}
-.shot.stage{background:linear-gradient(135deg,var(--accent-soft),var(--sunk) 70%);border:0;border-radius:12px;padding:28px 28px 0}
-@media (max-width:600px){.shot.stage{padding:16px 16px 0}}
-.shot.stage img{width:100%;border-radius:6px 6px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.35)}
+.shot.window{background:var(--surface);border:1px solid var(--line-2);border-radius:8px;padding:0;box-shadow:0 12px 32px rgba(0,0,0,.35)}
+.shot.window::before{content:"";display:block;height:26px;border-bottom:1px solid var(--line);background:radial-gradient(circle at 16px 50%,var(--line-2) 4.5px,transparent 5px),radial-gradient(circle at 33px 50%,var(--line-2) 4.5px,transparent 5px),radial-gradient(circle at 50px 50%,var(--line-2) 4.5px,transparent 5px)}
+.shot.window img{width:100%;border-radius:0}
 .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin:48px 0 0}
 .tldr>div{padding:22px 24px;border-right:1px solid var(--line)}
 .tldr>div:last-child{border-right:0}
