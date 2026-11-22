@@ -6,7 +6,7 @@
 <title>AI Code Assistant · Hadar Kellner</title>
 <meta name="description" content="Case study: designing an AI assistant in Wix Studio that writes code into live client sites, so people who don't code stay in control of every change.">
 <link rel="preload" href="../fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=13">
+<link rel="stylesheet" href="../style.css?v=14">
 </head>
 <body>
 <header class="nav">
@@ -193,16 +193,20 @@
           <figure style="margin:0">
             <div class="ui-stage">
               <div class="ui"><div class="p">
-                <div class="box">
-                  <div class="hdr" style="margin-bottom:6px"><span class="ok">✓</span> Generated Code</div>
-                  <div style="color:#5b6670">I’ve added a code that scale and spin <span class="hash">#shape1</span> 360 degrees while hovering it and reverse when hovering out.</div>
+                <div class="msg">
+                  <div class="stamp"><span class="bm"></span>05/06/2025 06:00 AM</div>
+                  <div class="box">
+                    <b>Added Animation</b>
+                    <p>Code has been added to your site to scale and spin <span class="hash">#shape1</span> 360 degrees while hovering it, and reverse when hovering out.</p>
+                    <b>Changed code files</b>
+                    <div class="files"><span><i>TS</i>extension.ts</span><span><i class="js">JS</i>index.js</span></div>
+                  </div>
+                  <div class="row-btns split"><span class="lnk">↶ Undo</span><span class="b fill">Preview Site</span></div>
                 </div>
-                <div>Let me know if there’s anything else I can help you customize.</div>
-                <div class="row-btns"><span class="b fill">Preview</span></div>
-                <div class="foot"><span>Not what you wanted? Restore your code to the previous state.</span><span class="lnk">Restore ⓘ</span></div>
+                <div style="margin-top:14px">Let me know if there’s anything else I can help you customize.</div>
               </div></div>
             </div>
-            <figcaption><strong style="color:var(--ink)">After:</strong> the change is already applied, explained in plain words, with preview and restore one click away.</figcaption>
+            <figcaption><strong style="color:var(--ink)">After:</strong> the change is already applied, explained in plain words, with a preview and a one-click undo.</figcaption>
           </figure>
         </div>
         <p class="redrawn">Cards redrawn from the shipped design so the text is readable. The copy is unchanged.</p>
